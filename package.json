@@ -1,8 +1,8 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "pass",
-  "title": "pass",
-  "description": "An extension to handle the standard unix password manager in a convenient way using raycast",
+  "title": "Pass",
+  "description": "An extension to handle the standard unix password manager in a convenient way using Raycast",
   "icon": "command-icon.png",
   "author": "francisco_flores",
   "categories": [
@@ -13,7 +13,7 @@
   "commands": [
     {
       "name": "index",
-      "title": "pass",
+      "title": "Pass",
       "subtitle": "Find password",
       "description": "Handle the standard unix password manager",
       "mode": "view"
