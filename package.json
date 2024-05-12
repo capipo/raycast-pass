@@ -4,7 +4,7 @@
   "title": "Pass",
   "description": "An extension to handle the standard unix password manager in a convenient way using Raycast",
   "icon": "command-icon.png",
-  "author": "francisco_flores",
+  "author": "capipo",
   "categories": [
     "Security",
     "Productivity"

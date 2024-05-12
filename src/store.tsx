@@ -4,8 +4,12 @@ import { useEffect, useState } from 'react';
 import { listFiles } from './gpg';
 import Content from './content';
 
-export default function Store({ storepath }) {
-  const [rows, setRows] = useState<Row[]>([]);
+interface StoreProps {
+  storepath: string;
+}
+
+export default function Store({ storepath }: StoreProps) {
+  const [rows, setRows] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -23,7 +27,7 @@ export default function Store({ storepath }) {
     fetchFiles();
   }, [storepath]);
 
-  const calcName = (filepath) => relative(storepath, filepath).replace('.gpg', '');
+  const calcName = (filepath: string) => relative(storepath, filepath).replace('.gpg', '');
 
   return (
     <List isLoading={isLoading}>

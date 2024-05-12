@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { decrypt } from './gpg';
 
 type Row = {
-  idx: integer;
+  idx: number;
   name: string;
   value: string;
 };
@@ -21,7 +21,11 @@ function parseRows(content: string): Row[] {
   ];
 }
 
-export default function Content({ path }) {
+interface ContentProps {
+  path: string;
+}
+
+export default function Content({ path }: ContentProps) {
   const [rows, setRows] = useState<Row[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
