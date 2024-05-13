@@ -1,8 +1,8 @@
 import { ActionPanel, Action, List, Icon } from '@raycast/api';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { decrypt } from './gpg';
 
-type Row = {
+interface Row {
   idx: number;
   name: string;
   value: string;
@@ -19,6 +19,42 @@ function parseRows(content: string): Row[] {
         return { idx: idx + 1, name, value };
       }),
   ];
+}
+
+function ContentRow(row: Row) {
+  const [show, setShow] = useState<boolean>(false);
+
+  const {toggleTitle, toggleIcon, itemTitle} = useMemo(() => {
+    return show ? {
+      toggleTitle: 'Hide Value',
+      toggleIcon: Icon.EyeDisabled,
+      itemTitle: row.name + ': ' + row.value,
+    } : {
+      toggleTitle: 'Show Value',
+      toggleIcon: Icon.Eye,
+      itemTitle: row.name,
+    }
+  }, [show])
+
+  return (
+    <List.Item
+      key={row.idx}
+      icon={Icon.Key}
+      title={itemTitle}
+      actions={
+        <ActionPanel>
+          <Action.Paste content={row.value} />
+          <Action.CopyToClipboard content={row.value} shortcut={{ modifiers: ['cmd', 'shift'], key: 'c' }} />
+          <Action
+            icon={toggleIcon}
+            title={toggleTitle}
+            onAction={() => setShow(!show)}
+            shortcut={{ modifiers: ['cmd', 'shift'], key: 'h' }}
+          />
+        </ActionPanel>
+      }
+    />
+  )
 }
 
 interface ContentProps {
@@ -46,19 +82,7 @@ export default function Content({ path }: ContentProps) {
 
   return (
     <List isLoading={isLoading}>
-      {rows.map((row) => (
-        <List.Item
-          key={row.idx}
-          icon={Icon.Key}
-          title={row.name}
-          actions={
-            <ActionPanel>
-              <Action.Paste content={row.value} />
-              <Action.CopyToClipboard content={row.value} shortcut={{ modifiers: ['cmd'], key: 'c' }} />
-            </ActionPanel>
-          }
-        />
-      ))}
+      {rows.map((row) => ( <ContentRow key={row.idx} {...row} />))}
     </List>
   );
 }
