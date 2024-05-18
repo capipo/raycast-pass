@@ -1,12 +1,12 @@
 import { ActionPanel, Action, List, Icon } from '@raycast/api';
 import { useEffect, useState, useMemo } from 'react';
-import { decrypt } from './gpg';
+import { decrypt } from './pass';
 
 interface Row {
   idx: number;
   name: string;
   value: string;
-};
+}
 
 function parseRows(content: string): Row[] {
   const [pass, ...extra] = content.split('\n');
@@ -24,17 +24,19 @@ function parseRows(content: string): Row[] {
 function ContentRow(row: Row) {
   const [show, setShow] = useState<boolean>(false);
 
-  const {toggleTitle, toggleIcon, itemTitle} = useMemo(() => {
-    return show ? {
-      toggleTitle: 'Hide Value',
-      toggleIcon: Icon.EyeDisabled,
-      itemTitle: row.name + ': ' + row.value,
-    } : {
-      toggleTitle: 'Show Value',
-      toggleIcon: Icon.Eye,
-      itemTitle: row.name,
-    }
-  }, [show])
+  const { toggleTitle, toggleIcon, itemTitle } = useMemo(() => {
+    return show
+      ? {
+          toggleTitle: 'Hide Value',
+          toggleIcon: Icon.EyeDisabled,
+          itemTitle: row.name + ': ' + row.value,
+        }
+      : {
+          toggleTitle: 'Show Value',
+          toggleIcon: Icon.Eye,
+          itemTitle: row.name,
+        };
+  }, [show]);
 
   return (
     <List.Item
@@ -54,21 +56,22 @@ function ContentRow(row: Row) {
         </ActionPanel>
       }
     />
-  )
+  );
 }
 
 interface ContentProps {
-  path: string;
+  storepath: string;
+  file: string;
 }
 
-export default function Content({ path }: ContentProps) {
+export default function Content({ storepath, file }: ContentProps) {
   const [rows, setRows] = useState<Row[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchContent() {
       try {
-        const decrypted = await decrypt(path);
+        const decrypted = await decrypt(file, storepath);
         setRows(parseRows(decrypted));
       } catch (error) {
         console.error('Failed to fetch password content:', error);
@@ -78,11 +81,13 @@ export default function Content({ path }: ContentProps) {
     }
 
     fetchContent();
-  }, [path]);
+  }, [file]);
 
   return (
     <List isLoading={isLoading}>
-      {rows.map((row) => ( <ContentRow key={row.idx} {...row} />))}
+      {rows.map((row) => (
+        <ContentRow key={row.idx} {...row} />
+      ))}
     </List>
   );
 }
