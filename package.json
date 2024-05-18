@@ -13,8 +13,7 @@
   "commands": [
     {
       "name": "index",
-      "title": "Pass",
-      "subtitle": "Find password",
+      "title": "Find in Pass",
       "description": "Handle the standard unix password manager",
       "mode": "view"
     }
