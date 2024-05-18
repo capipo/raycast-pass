@@ -1,17 +1,24 @@
-import { exec, execSync } from 'child_process';
+import { getPreferenceValues } from '@raycast/api';
+import { exec } from 'child_process';
 import { promisify } from 'util';
 import { readdir, stat } from 'fs/promises';
 import { join, extname, relative } from 'path';
 
 const execAsync = promisify(exec);
-const envPath = execSync('echo $PATH').toString() + ':/opt/homebrew/bin';
+
+async function envPath(): Promise<string> {
+  const { stdout: path } = await execAsync('echo $PATH');
+  const { customBrewPath } = getPreferenceValues();
+
+  return [path.trim(), customBrewPath || '/opt/homebrew/bin'].join(':');
+}
 
 export async function pass(cmd: string, storeDir: string = ''): Promise<string> {
   const { stdout, stderr } = await execAsync(`pass ${cmd}`, {
     timeout: 10000,
     env: {
       ...process.env,
-      PATH: envPath,
+      PATH: await envPath(),
       PASSWORD_STORE_DIR: storeDir,
     },
   });
