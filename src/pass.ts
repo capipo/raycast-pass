@@ -6,7 +6,7 @@ import { join, extname, relative } from 'path';
 const execAsync = promisify(exec);
 const envPath = execSync('echo $PATH').toString() + ':/opt/homebrew/bin';
 
-async function pass(cmd: string, storeDir: string = ''): Promise<string> {
+export async function pass(cmd: string, storeDir: string = ''): Promise<string> {
   const { stdout, stderr } = await execAsync(`pass ${cmd}`, {
     timeout: 10000,
     env: {
