@@ -51,5 +51,5 @@ export async function list(storeDir: string, subDir: string = ''): Promise<strin
 }
 
 export async function decrypt(path: string, storeDir: string): Promise<string> {
-  return pass(path, storeDir);
+  return pass(`'${path}'`, storeDir);
 }
