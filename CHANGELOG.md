@@ -3,6 +3,7 @@
 ## [1.1.0] - 2024-06-16
 
 - BugFix: Error reading password whose name contains space.
+- Pass-otp extension support.
 
 ## [1.0.0] - 2024-05-18
 
