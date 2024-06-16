@@ -37,6 +37,18 @@
       "title": "Homebrew Path",
       "description": "Custom Homebrew Executable Path",
       "required": false
+    },
+    {
+      "name": "defaultAction",
+      "type": "dropdown",
+      "title": "Default action",
+      "description": "What should happen when you press Enter on a content row?",
+      "default": "paste",
+      "required": false,
+      "data": [
+        { "value": "paste", "title": "Paste" },
+        { "value": "copy", "title": "Copy" }
+      ]
     }
   ],
   "scripts": {

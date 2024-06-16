@@ -4,6 +4,7 @@
 
 - BugFix: Error reading password whose name contains space.
 - Pass-otp extension support.
+- Add defaultAction preference to set content row behavior.
 
 ## [1.0.0] - 2024-05-18
 

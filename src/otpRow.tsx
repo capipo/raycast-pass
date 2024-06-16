@@ -1,3 +1,4 @@
+import { getPreferenceValues } from '@raycast/api';
 import { ActionPanel, Action, List, Icon, showToast, Toast, Clipboard } from '@raycast/api';
 import { otp } from './pass';
 
@@ -7,6 +8,8 @@ interface OptRowProps {
 }
 
 export function OtpRow({ file, storepath }: OptRowProps) {
+  const { defaultAction } = getPreferenceValues();
+
   async function handleAction(action: string) {
     try {
       const content = await otp(file, storepath);
@@ -27,12 +30,17 @@ export function OtpRow({ file, storepath }: OptRowProps) {
       title="otpauth"
       actions={
         <ActionPanel>
-          <Action title="Paste OTP Auth" onAction={() => handleAction('paste')} />
-          <Action
-            title="Copy OTP Auth"
-            onAction={() => handleAction('copy')}
-            shortcut={{ modifiers: ['cmd', 'shift'], key: 'c' }}
-          />
+          {defaultAction === 'copy' ? (
+            <>
+              <Action title="Copy OTP to Clipboard" onAction={() => handleAction('copy')} />
+              <Action title="Paste OTP in Active App" onAction={() => handleAction('paste')} />
+            </>
+          ) : (
+            <>
+              <Action title="Paste OTP in Active App" onAction={() => handleAction('paste')} />
+              <Action title="Copy OTP to Clipboard" onAction={() => handleAction('copy')} />
+            </>
+          )}
         </ActionPanel>
       }
     />
